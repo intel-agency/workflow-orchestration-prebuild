@@ -24,7 +24,7 @@ RUN curl -fsSL "https://nodejs.org/dist/v${NODE_LTS_VERSION}/node-v${NODE_LTS_VE
     && tar -xJf /tmp/node.tar.xz -C /usr/local --strip-components=1 \
     && rm /tmp/node.tar.xz
 
-# .NET SDK 10.0.102 LTS
+# .NET SDK 10.0.201
 RUN curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin \
       --version "${DOTNET_SDK_VERSION}" \
       --install-dir /usr/share/dotnet \
@@ -59,7 +59,8 @@ RUN mkdir -p /etc/apt/keyrings \
     && rm -rf /var/lib/apt/lists/*
 
 # PowerShell Core
-RUN curl -fsSL "https://github.com/PowerShell/PowerShell/releases/download/v${PWSH_VERSION}/powershell-${PWSH_VERSION}-linux-x64.tar.gz" -o /tmp/pwsh.tar.gz \
+RUN PWSH_ARCH=$(dpkg --print-architecture | sed 's/amd64/x64/') \
+    && curl -fsSL "https://github.com/PowerShell/PowerShell/releases/download/v${PWSH_VERSION}/powershell-${PWSH_VERSION}-linux-${PWSH_ARCH}.tar.gz" -o /tmp/pwsh.tar.gz \
     && mkdir -p /opt/microsoft/powershell/7 \
     && tar -xzf /tmp/pwsh.tar.gz -C /opt/microsoft/powershell/7 \
     && chmod +x /opt/microsoft/powershell/7/pwsh \
@@ -76,11 +77,10 @@ RUN curl -fsSL "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/te
 RUN bun install -g @devcontainers/cli@${DEVCONTAINER_CLI_VERSION}
 
 
-# GitHub Copilot CLI (gh extension)
-RUN gh extension install github/gh-copilot
-
 # Aspire CLI
-RUN curl -sSL https://aspire.dev/install.sh | bash \
+RUN curl -fsSL https://aspire.dev/install.sh -o /tmp/aspire-install.sh \
+    && bash /tmp/aspire-install.sh \
+    && rm /tmp/aspire-install.sh \
     && cp /root/.aspire/bin/aspire /usr/local/bin/aspire \
     && chmod +x /usr/local/bin/aspire
 
@@ -112,7 +112,8 @@ RUN node --version \
     && devcontainer --version \
     && gemini --version \
     && codex --version \
+    && kimi --version \
     && aspire --version \
-    && opencode version \
+    && opencode --version \
     && python3 --version \
     && copilot --version
