@@ -15,6 +15,7 @@ ARG OPENCODE_VERSION=1.3.13
 ARG GH_COPILOT_CLI_VERSION=1.0.16
 ARG AUGGIE_VERSION=0.21.0
 ARG FACTORY_DROID_VERSION=0.92.0
+ARG KILO_CODE_VERSION=7.1.20
 
 # System dependencies (python3 needed for scripts/trace-extract.py)
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -109,6 +110,9 @@ RUN bun install -g @augmentcode/auggie@${AUGGIE_VERSION} --trust
 # Factory Droid CLI
 RUN bun install -g @factory/cli@${FACTORY_DROID_VERSION} --trust
 
+# Kilo Code CLI
+RUN bun install -g @kilocode/cli@${KILO_CODE_VERSION} --trust
+
 # Validate all installed tools
 RUN node --version \
     && dotnet --version \
@@ -126,4 +130,5 @@ RUN node --version \
     && python3 --version \
     && copilot --version \
     && auggie --version \
-    && droid --version
+    && droid --version \
+    && kilo --version
