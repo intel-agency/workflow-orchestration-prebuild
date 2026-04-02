@@ -49,7 +49,58 @@ RUN mkdir -p /etc/apt/keyrings \
     && apt-get update && apt-get install -y --no-install-recommends gh \
     && rm -rf /var/lib/apt/lists/*
 
+# PowerShell Core 7.6.0
+ARG PWSH_VERSION=7.6.0
+RUN curl -fsSL "https://github.com/PowerShell/PowerShell/releases/download/v${PWSH_VERSION}/powershell-${PWSH_VERSION}-linux-x64.tar.gz" -o /tmp/pwsh.tar.gz \
+    && mkdir -p /opt/microsoft/powershell/7 \
+    && tar -xzf /tmp/pwsh.tar.gz -C /opt/microsoft/powershell/7 \
+    && chmod +x /opt/microsoft/powershell/7/pwsh \
+    && ln -sf /opt/microsoft/powershell/7/pwsh /usr/local/bin/pwsh \
+    && rm /tmp/pwsh.tar.gz
+
+# Terraform CLI
+ARG TERRAFORM_VERSION=1.12.1
+RUN curl -fsSL "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip" -o /tmp/terraform.zip \
+    && unzip /tmp/terraform.zip -d /usr/local/bin \
+    && chmod +x /usr/local/bin/terraform \
+    && rm /tmp/terraform.zip
+
+# Dev Container CLI
+RUN bun install -g @devcontainers/cli
+
+# Gemini CLI
+RUN bun install -g @google/gemini-cli --trust
+
+# Kimi Code CLI
+RUN bun install -g kimi-code --trust
+
+# Codex CLI (OpenAI)
+RUN bun install -g @openai/codex --trust
+
+# GitHub Copilot CLI (gh extension)
+RUN gh extension install github/gh-copilot --trust
+
+# Aspire CLI
+RUN curl -sSL https://aspire.dev/install.sh | bash \
+    && cp /root/.aspire/bin/aspire /usr/local/bin/aspire \
+    && chmod +x /usr/local/bin/aspire
+
 # opencode CLI
 RUN curl -fsSL https://opencode.ai/install | bash -s -- --version "${OPENCODE_VERSION}" --no-modify-path \
     && cp /root/.opencode/bin/opencode /usr/local/bin/opencode \
     && chmod +x /usr/local/bin/opencode
+
+# Validate all installed tools
+RUN node --version \
+    && dotnet --version \
+    && bun --version \
+    && uv --version \
+    && gh --version \
+    && pwsh --version \
+    && terraform --version \
+    && devcontainer --version \
+    && gemini --version \
+    && codex --version \
+    && aspire --version \
+    && opencode version \
+    && python3 --version
