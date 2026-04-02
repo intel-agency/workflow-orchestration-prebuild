@@ -13,6 +13,7 @@ ARG KIMI_CODE_VERSION=1.0.11
 ARG CODEX_VERSION=0.118.0
 ARG OPENCODE_VERSION=1.3.13
 ARG GH_COPILOT_CLI_VERSION=1.0.16
+ARG AUGGIE_VERSION=0.21.0
 
 # System dependencies (python3 needed for scripts/trace-extract.py)
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -101,6 +102,9 @@ RUN bun install -g @openai/codex@${CODEX_VERSION} --trust
 # GH Copilot CLI
 RUN bun install -g @github/copilot@${GH_COPILOT_CLI_VERSION} --trust
 
+# Auggie CLI (Augment Code)
+RUN bun install -g @augmentcode/auggie@${AUGGIE_VERSION} --trust
+
 # Validate all installed tools
 RUN node --version \
     && dotnet --version \
@@ -116,4 +120,5 @@ RUN node --version \
     && aspire --version \
     && opencode --version \
     && python3 --version \
-    && copilot --version
+    && copilot --version \
+    && auggie --version
