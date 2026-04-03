@@ -19,7 +19,7 @@ ARG KILO_CODE_VERSION=7.1.20
 
 # System dependencies (python3 needed for scripts/trace-extract.py)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-      curl unzip git ca-certificates python3 \
+      curl unzip git ca-certificates python3 libsecret-1-0 \
     && rm -rf /var/lib/apt/lists/*
 
 # Node.js (needed for MCP server packages)
