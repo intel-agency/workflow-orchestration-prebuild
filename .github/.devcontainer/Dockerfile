@@ -125,7 +125,7 @@ RUN node --version \
     && devcontainer --version \
     && gemini --version \
     && codex --version \
-    && kimi --version \
+    && which kimi \
     && aspire --version \
     && opencode --version \
     && python3 --version \
