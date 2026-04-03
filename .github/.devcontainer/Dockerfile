@@ -37,7 +37,7 @@ ENV PATH="${PATH}:${DOTNET_ROOT}:${DOTNET_ROOT}/tools"
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 # Avalonia templates
-RUN dotnet new install Avalonia.Templates::11.3.13
+RUN dotnet new install Avalonia.Templates::11.3.12
 
 # Bun
 ENV BUN_INSTALL=/usr/local/bun
