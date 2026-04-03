@@ -34,6 +34,7 @@ RUN curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin \
     && ln -sf /usr/share/dotnet/dotnet /usr/local/bin/dotnet
 ENV DOTNET_ROOT=/usr/share/dotnet
 ENV PATH="${PATH}:${DOTNET_ROOT}:${DOTNET_ROOT}/tools"
+ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 # Avalonia templates
 RUN dotnet new install Avalonia.Templates::11.3.13
